@@ -68,8 +68,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  uint8_t lastKeyState = 1;     //高电平为松开
-  uint8_t dir = 0;
+  // uint8_t lastKeyState = 1;     //高电平为松开
+  // uint8_t dir = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -100,28 +100,30 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){    //低电平为按键按下
-    //   HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
+    if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){    //低电平为按键按下
+      HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
+    }
+
+    // 按键控制电机
+    // uint8_t keyState = HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin);
+    // if(keyState==0 && lastKeyState==1){
+    //   HAL_Delay(10);
+    //   if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){
+    //     Motor_SetDir(dir);
+    //     Motor_Enable(1);
+    //   }
     // }
-    uint8_t keyState = HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin);
-    if(keyState==0 && lastKeyState==1){
-      HAL_Delay(10);
-      if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){
-        Motor_SetDir(dir);
-        Motor_Enable(1);
-      }
-    }
-    if(keyState==1 && lastKeyState==0){
-      HAL_Delay(10);
-      if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==1){
-        Motor_Enable(0);
-        if(dir==1){
-          dir=0;
-        }else dir = 1;
-      }
-    }
-    lastKeyState = keyState;
-    HAL_Delay(5);
+    // if(keyState==1 && lastKeyState==0){
+    //   HAL_Delay(10);
+    //   if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==1){
+    //     Motor_Enable(0);
+    //     if(dir==1){
+    //       dir=0;
+    //     }else dir = 1;
+    //   }
+    // }
+    // lastKeyState = keyState;
+    // HAL_Delay(5);
 
     /* USER CODE END WHILE */
 
