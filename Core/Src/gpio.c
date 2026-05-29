@@ -48,16 +48,23 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, StepDIR_Pin|StepEN_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOC, PwrEn_Pin, GPIO_PIN_SET);
-  /*Configure GPIO pins : StepDIR_Pin StepEN_Pin */
-  GPIO_InitStruct.Pin = StepDIR_Pin|StepEN_Pin;
+  HAL_GPIO_WritePin(GPIOC, StepDIR_Pin|PwrEn_Pin|StepEN_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, LCD_CS_Pin|LCD_RST_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : StepDIR_Pin */
+  GPIO_InitStruct.Pin = StepDIR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(StepDIR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PowerKey_Pin */
   GPIO_InitStruct.Pin = PowerKey_Pin;
@@ -65,12 +72,26 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(PowerKey_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PwrEn_Pin */
-  GPIO_InitStruct.Pin = PwrEn_Pin;
+  /*Configure GPIO pins : PwrEn_Pin StepEN_Pin */
+  GPIO_InitStruct.Pin = PwrEn_Pin|StepEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(PwrEn_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LCD_CS_Pin LCD_RST_Pin */
+  GPIO_InitStruct.Pin = LCD_CS_Pin|LCD_RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LCD_DC_Pin */
+  GPIO_InitStruct.Pin = LCD_DC_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(LCD_DC_GPIO_Port, &GPIO_InitStruct);
 
 }
 

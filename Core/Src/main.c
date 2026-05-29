@@ -19,13 +19,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "rtc.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include "motor.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd.h"
+#include "motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,8 +94,11 @@ int main(void)
   MX_GPIO_Init();
   MX_RTC_Init();
   MX_TIM3_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  Motor_Init();
+  //Motor_Init();
+  LCD_Init();
+  LCD_FillColor(COLOR_BLUE);
   /* USER CODE END 2 */
 
   /* Infinite loop */

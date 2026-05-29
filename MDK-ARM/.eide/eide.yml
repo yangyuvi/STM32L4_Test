@@ -6,7 +6,8 @@ packDir: .pack/Keil/STM32L4xx_DFP.2.5.0
 srcDirs: []
 virtualFolder:
   name: <virtual_root>
-  files: []
+  files:
+    - path: ../README.md
   folders:
     - name: Application
       files: []
@@ -23,10 +24,12 @@ virtualFolder:
                 - path: ../Core/Src/main.c
                 - path: ../Core/Src/gpio.c
                 - path: ../Core/Src/rtc.c
+                - path: ../Core/Src/spi.c
                 - path: ../Core/Src/tim.c
                 - path: ../Core/Src/stm32l4xx_it.c
                 - path: ../Core/Src/stm32l4xx_hal_msp.c
                 - path: ../Core/Src/motor.c
+                - path: ../Core/Src/lcd.c
               folders: []
     - name: Drivers
       files: []
@@ -50,6 +53,8 @@ virtualFolder:
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
           folders: []

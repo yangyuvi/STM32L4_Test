@@ -61,10 +61,20 @@ void Error_Handler(void);
 #define StepDIR_GPIO_Port GPIOC
 #define PowerKey_Pin GPIO_PIN_0
 #define PowerKey_GPIO_Port GPIOA
+#define LCD_SCK_Pin GPIO_PIN_5
+#define LCD_SCK_GPIO_Port GPIOA
 #define PwrEn_Pin GPIO_PIN_7
 #define PwrEn_GPIO_Port GPIOC
+#define LCD_CS_Pin GPIO_PIN_8
+#define LCD_CS_GPIO_Port GPIOA
+#define LCD_RST_Pin GPIO_PIN_11
+#define LCD_RST_GPIO_Port GPIOA
+#define LCD_SDA_Pin GPIO_PIN_12
+#define LCD_SDA_GPIO_Port GPIOA
 #define StepEN_Pin GPIO_PIN_12
 #define StepEN_GPIO_Port GPIOC
+#define LCD_DC_Pin GPIO_PIN_3
+#define LCD_DC_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
