@@ -30,6 +30,9 @@ virtualFolder:
                 - path: ../Core/Src/stm32l4xx_hal_msp.c
                 - path: ../Core/Src/motor.c
                 - path: ../Core/Src/lcd.c
+                - path: ../Core/Src/sai.c
+                - path: ../Core/Src/dma.c
+                - path: ../Core/Src/audio.c
               folders: []
     - name: Drivers
       files: []
@@ -57,6 +60,7 @@ virtualFolder:
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_sai.c
           folders: []
         - name: CMSIS
           files:

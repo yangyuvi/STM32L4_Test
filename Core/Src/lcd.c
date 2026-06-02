@@ -51,6 +51,7 @@ void LCD_Reset(void)
   */
 void LCD_Init(void)
 {
+  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);
   LCD_CS_HIGH();
   LCD_DC_HIGH();
 
