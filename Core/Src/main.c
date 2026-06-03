@@ -18,11 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "dma.h"
 #include "rtc.h"
 #include "sai.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -30,6 +32,7 @@
 #include "lcd.h"
 #include "motor.h"
 #include "audio_data.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -84,7 +87,7 @@ void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+static uint16_t adc_buf[1];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -133,10 +136,14 @@ int main(void)
   MX_RTC_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
-  MX_SAI1_Init();
+  //MX_SAI1_Init();
+  MX_ADC1_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   //Motor_Init();
-  
+  HAL_ADCEx_Calibration_Start(&hadc1,ADC_SINGLE_ENDED); //上电校准
+  HAL_ADC_Start_DMA(&hadc1,(uint32_t *)adc_buf,1);
+
   LCD_Init();
   LCD_FillColor(COLOR_RED);
 
@@ -146,11 +153,12 @@ int main(void)
   // pcm_pos   = 0;
 
   //预填充
-  FillBuf(&dma_buf[0],       BUF_HALF);
-  FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
+  // FillBuf(&dma_buf[0],       BUF_HALF);
+  // FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
 
   //启动 DMA 播放
-  HAL_SAI_Transmit_DMA(&hsai_BlockA1, (uint8_t *)dma_buf, BUF_SIZE);
+  //HAL_SAI_Transmit_DMA(&hsai_BlockA1, (uint8_t *)dma_buf, BUF_SIZE);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -161,7 +169,8 @@ int main(void)
       HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
     }
 
-   
+    //HAL_UART_Transmit(&huart2,(uint8_t *)adc_buf,2,HAL_MAX_DELAY);
+    printf("%d\r\n",adc_buf[0]);
 
     // 按键控制电机
     // uint8_t keyState = HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin);

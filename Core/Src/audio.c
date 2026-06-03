@@ -50,26 +50,26 @@
 //   * @brief  播放WAV文件
 //   * @param  
 //   */
-// // HAL_StatusTypeDef Audio_Play(const uint8_t *wav, uint32_t size)
-// // {
-// //   if(!wav || size<sizeof(WavHeader_t)) return HAL_ERROR;  //输入合法性检测
+// HAL_StatusTypeDef Audio_Play(const uint8_t *wav, uint32_t size)
+// {
+//   if(!wav || size<sizeof(WavHeader_t)) return HAL_ERROR;  //输入合法性检测
 
-// //   WavHeader_t *hdr = (WavHeader_t *)wav;
+//   WavHeader_t *hdr = (WavHeader_t *)wav;
 
-// //   //格式校验 PCM格式 16bit
-// //   if(hdr->audio_format != 1) return HAL_ERROR;
-// //   if(hdr->bits_per_sample != 16) return HAL_ERROR;
+//   //格式校验 PCM格式 16bit
+//   if(hdr->audio_format != 1) return HAL_ERROR;
+//   if(hdr->bits_per_sample != 16) return HAL_ERROR;
   
-// //   pcm_data = (const int16_t *)(wav + 44);   //跳过44字节 WAV 头，指向 PCM 数据
-// //   pcm_total = hdr->data_size / 2;
-// //   pcm_pos = 0;
+//   pcm_data = (const int16_t *)(wav + 44);   //跳过44字节 WAV 头，指向 PCM 数据
+//   pcm_total = hdr->data_size / 2;
+//   pcm_pos = 0;
 
-// //   FillBuf(&dma_buf[0], BUF_HALF);
-// //   FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
+//   FillBuf(&dma_buf[0], BUF_HALF);
+//   FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
 
-// //   HAL_SAI_Transmit_DMA(&hsai_BlockA1,(uint8_t *)dma_buf,BUF_SIZE);
+//   HAL_SAI_Transmit_DMA(&hsai_BlockA1,(uint8_t *)dma_buf,BUF_SIZE);
 
-// //   return HAL_OK;
-// // }
+//   return HAL_OK;
+// }
 
 
