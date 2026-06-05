@@ -31,8 +31,8 @@
 /* USER CODE BEGIN Includes */
 #include "lcd.h"
 #include "motor.h"
-#include "audio_data.h"
-
+#include "audio.h"
+#include "ws2812b.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,41 +42,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define BUF_HALF  512
-#define BUF_SIZE  (BUF_HALF * 2)
-static uint16_t dma_buf[BUF_SIZE];    //双缓冲
 
-extern const int16_t audio_wav[];
-extern const uint32_t audio_wav_len;
-
-// PCM 数据指针
-// static const int16_t *pcm_data  = NULL;
-// static uint32_t       pcm_total = 0;
-static uint32_t       pcm_pos   = 0;
-
-/**
-  * @brief  填充 DMA 缓冲区的一个半段
-  * @param  dst     目标缓冲区
-  * @param  half    要填充的半段长度
-  */
-static void FillBuf(uint16_t *dst, uint32_t half)
-{
-  uint32_t i;
-  for(i=0; i<half; i++){
-    dst[i] = (pcm_pos < audio_wav_len) ? (uint16_t)audio_wav[pcm_pos++] : 0;
-  }
-
-}
-
-//DMA中断回调，HAL自动调用
-void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
-{
-  FillBuf(&dma_buf[0],BUF_HALF);          //前半完成，填充前半
-}
-void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
-{
-  FillBuf(&dma_buf[BUF_HALF],BUF_HALF);   //后半完成，填充后半
-}
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -136,28 +102,23 @@ int main(void)
   MX_RTC_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
-  //MX_SAI1_Init();
+  MX_SAI1_Init();
   MX_ADC1_Init();
   MX_USART2_UART_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
-  //Motor_Init();
+  Motor_Init();
+  
   HAL_ADCEx_Calibration_Start(&hadc1,ADC_SINGLE_ENDED); //上电校准
   HAL_ADC_Start_DMA(&hadc1,(uint32_t *)adc_buf,1);
 
   LCD_Init();
   LCD_FillColor(COLOR_RED);
 
-  // Audio_Play(audio_wav, audio_wav_len);
-  // pcm_data  = (const int16_t *)(audio_wav);
-  // pcm_total = (audio_wav_len - 44) / 2;
-  // pcm_pos   = 0;
+  Audio_Init();
+  Audio_Play();
 
-  //预填充
-  // FillBuf(&dma_buf[0],       BUF_HALF);
-  // FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
-
-  //启动 DMA 播放
-  //HAL_SAI_Transmit_DMA(&hsai_BlockA1, (uint8_t *)dma_buf, BUF_SIZE);
+  WS2812B_Init();
 
   /* USER CODE END 2 */
 
@@ -170,7 +131,8 @@ int main(void)
     }
 
     //HAL_UART_Transmit(&huart2,(uint8_t *)adc_buf,2,HAL_MAX_DELAY);
-    printf("%d\r\n",adc_buf[0]);
+    //printf("%d\r\n",adc_buf[0]);    
+    //HAL_Delay(100);
 
     // 按键控制电机
     // uint8_t keyState = HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin);

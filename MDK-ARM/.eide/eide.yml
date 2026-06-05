@@ -35,6 +35,7 @@ virtualFolder:
                 - path: ../Core/Src/dma.c
                 - path: ../Core/Src/audio.c
                 - path: ../Core/Src/adc.c
+                - path: ../Core/Src/ws2812b.c
               folders: []
     - name: Drivers
       files: []

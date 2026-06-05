@@ -1,49 +1,54 @@
 
 #include "audio.h"
 #include "sai.h"
+#include "audio_data.h"
 
-// #define BUF_HALF  512
-// #define BUF_SIZE  (BUF_HALF * 2)
-// static uint16_t dma_buf[BUF_SIZE];    //双缓冲
+#define BUF_HALF  512
+#define BUF_SIZE  (BUF_HALF * 2)
+static uint16_t dma_buf[BUF_SIZE];    //双缓冲
 
-// // PCM 数据指针
+// PCM 数据指针
 // static const int16_t *pcm_data  = NULL;
 // static uint32_t       pcm_total = 0;
-// static uint32_t       pcm_pos   = 0;
+static uint32_t pcm_pos = 0;
 
-// /**
-//   * @brief  填充 DMA 缓冲区的一个半段
-//   * @param  dst     目标缓冲区
-//   * @param  half    要填充的半段长度
-//   */
-// static void FillBuf(uint16_t *dst, uint32_t half)
-// {
-//   uint32_t i;
-//   for(i=0; i<half; i++){
-//     dst[i] = (pcm_pos < pcm_total) ? (uint16_t)pcm_data[pcm_pos++] : 0;
-//   }
+/**
+  * @brief  填充 DMA 缓冲区的一个半段
+  * @param  dst     目标缓冲区
+  * @param  half    要填充的半段长度
+  */
+static void FillBuf(uint16_t *dst, uint32_t half)
+{
+  uint32_t i;
+  for(i=0; i<half; i++){
+    dst[i] = (pcm_pos < audio_wav_len) ? (uint16_t)audio_wav[pcm_pos++] : 0;
+  }
 
-// }
+}
 
-// //DMA中断回调，HAL自动调用
-// void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
-// {
-//   FillBuf(&dma_buf[0],BUF_HALF);          //前半完成，填充前半
-// }
-// void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
-// {
-//   FillBuf(&dma_buf[BUF_HALF],BUF_HALF);   //后半完成，填充后半
-// }
+//DMA中断回调，HAL自动调用
+void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
+{
+  FillBuf(&dma_buf[0],BUF_HALF);          //前半完成，填充前半
+}
+void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
+{
+  FillBuf(&dma_buf[BUF_HALF],BUF_HALF);   //后半完成，填充后半
+}
 
-// /**
-//   * @brief  
-//   * @param  
-//   */
-// void Audio_Init(void)
-// {
+/**
+  * @brief  
+  * @param  
+  */
+void Audio_Init(void)
+{
+  pcm_pos   = 0;
 
+  //预填充
+  FillBuf(&dma_buf[0],        BUF_HALF);
+  FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
 
-// }
+}
 
 
 // /**
@@ -72,4 +77,12 @@
 //   return HAL_OK;
 // }
 
-
+/**
+  * @brief  
+  * @param  
+  */
+void Audio_Play(void)
+{
+  //启动 DMA 播放
+  HAL_SAI_Transmit_DMA(&hsai_BlockA1, (uint8_t *)dma_buf, BUF_SIZE);
+}
