@@ -33,6 +33,9 @@
 #include "motor.h"
 #include "audio.h"
 #include "ws2812b.h"
+#include "key.h"
+#include "ProcKey.h"
+#include "sensor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,7 +56,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static uint16_t adc_buf[1];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -75,9 +78,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  // uint8_t lastKeyState = 1;     //高电平为松开
-  // uint8_t dir = 0;
-
+  uint32_t keyTick = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -107,17 +108,11 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
+  Key_Init();
   Motor_Init();
-  
-  HAL_ADCEx_Calibration_Start(&hadc1,ADC_SINGLE_ENDED); //上电校准
-  HAL_ADC_Start_DMA(&hadc1,(uint32_t *)adc_buf,1);
-
+  Sensor_Init();
   LCD_Init();
-  LCD_FillColor(COLOR_RED);
-
   Audio_Init();
-  Audio_Play();
-
   WS2812B_Init();
 
   /* USER CODE END 2 */
@@ -126,34 +121,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){    //低电平为按键按下
-      HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
-    }
+    // if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){    //低电平为按键按下
+    //   HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
+    // }
 
     //HAL_UART_Transmit(&huart2,(uint8_t *)adc_buf,2,HAL_MAX_DELAY);
     //printf("%d\r\n",adc_buf[0]);    
-    //HAL_Delay(100);
+    
+    if(HAL_GetTick() - keyTick >= 10)
+    {
+      keyTick = HAL_GetTick();
 
-    // 按键控制电机
-    // uint8_t keyState = HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin);
-    // if(keyState==0 && lastKeyState==1){
-    //   HAL_Delay(10);
-    //   if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){
-    //     Motor_SetDir(dir);
-    //     Motor_Enable(1);
-    //   }
-    // }
-    // if(keyState==1 && lastKeyState==0){
-    //   HAL_Delay(10);
-    //   if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==1){
-    //     Motor_Enable(0);
-    //     if(dir==1){
-    //       dir=0;
-    //     }else dir = 1;
-    //   }
-    // }
-    // lastKeyState = keyState;
-    // HAL_Delay(5);
+      Key_Scan(KEY1, OnKey1Event);
+      Key_Scan(KEY2, OnKey2Event);
+      Key_Scan(KEY3, OnKey3Event);
+    }
+    
+    Sensor_App();
+    
 
     /* USER CODE END WHILE */
 

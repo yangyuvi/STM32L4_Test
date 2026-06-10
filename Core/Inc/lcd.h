@@ -21,5 +21,7 @@
 
 void LCD_Init(void);
 void LCD_FillColor(uint16_t color);
+void LCD_DisplayOff(void);
+void LCD_DisplayOn(void);
 
 #endif 

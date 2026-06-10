@@ -33,5 +33,5 @@ typedef struct{
 void WS2812B_Init(void);
 void WS2812B_SetLED(uint8_t index, Color_t color);
 void WS2812B_Show(void);
-
+void WS2812B_Clear(void);
 #endif 

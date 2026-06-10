@@ -17,8 +17,7 @@ virtualFolder:
             - path: startup_stm32l452xx.s
           folders: []
         - name: User
-          files:
-            - path: ../Core/Src/usart.c
+          files: []
           folders:
             - name: Core
               files:
@@ -36,6 +35,10 @@ virtualFolder:
                 - path: ../Core/Src/audio.c
                 - path: ../Core/Src/adc.c
                 - path: ../Core/Src/ws2812b.c
+                - path: ../Core/Src/key.c
+                - path: ../Core/Src/usart.c
+                - path: ../Core/Src/ProcKey.c
+                - path: ../Core/Src/sensor.c
               folders: []
     - name: Drivers
       files: []

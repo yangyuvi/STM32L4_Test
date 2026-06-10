@@ -36,7 +36,6 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,10 +58,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define StepDIR_Pin GPIO_PIN_13
 #define StepDIR_GPIO_Port GPIOC
-#define PowerKey_Pin GPIO_PIN_0
-#define PowerKey_GPIO_Port GPIOA
+#define KEY1_Pin GPIO_PIN_0
+#define KEY1_GPIO_Port GPIOA
 #define LCD_SCK_Pin GPIO_PIN_5
 #define LCD_SCK_GPIO_Port GPIOA
+#define KEY2_Pin GPIO_PIN_4
+#define KEY2_GPIO_Port GPIOC
+#define KEY3_Pin GPIO_PIN_5
+#define KEY3_GPIO_Port GPIOC
 #define PwrEn_Pin GPIO_PIN_7
 #define PwrEn_GPIO_Port GPIOC
 #define LCD_CS_Pin GPIO_PIN_8
@@ -77,6 +80,8 @@ void Error_Handler(void);
 #define StepEN_GPIO_Port GPIOC
 #define LCD_DC_Pin GPIO_PIN_3
 #define LCD_DC_GPIO_Port GPIOB
+#define LCD_CTL_Pin GPIO_PIN_4
+#define LCD_CTL_GPIO_Port GPIOB
 #define WS2812B_DATA_Pin GPIO_PIN_8
 #define WS2812B_DATA_GPIO_Port GPIOB
 

@@ -46,3 +46,11 @@ void WS2812B_Show(void)
   //开启PWM功能，TIM溢出时DMA搬运数据，搬完停止
   HAL_TIM_PWM_Start_DMA(&htim16, TIM_CHANNEL_1, (uint32_t *)DMABuffer,BUFFER_SIZE);
 }
+
+void WS2812B_Clear(void)
+{
+  uint8_t i;
+  for(i=0; i<LED_NUM; i++){
+    WS2812B_SetLED(i,WS2812B_OFF);
+  }
+}

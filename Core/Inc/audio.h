@@ -30,6 +30,8 @@
 
 //HAL_StatusTypeDef Audio_Play(const uint8_t *wav, uint32_t size);
 void Audio_Play(void);
+void Audio_Stop(void);
 void Audio_Init(void);
+uint8_t Audio_IsPlaying(void);
 
 #endif 
