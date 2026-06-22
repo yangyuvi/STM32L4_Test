@@ -5,10 +5,10 @@
 #include "key.h"
 
 typedef enum {
-    MODE_MOTOR = 0,
-    MODE_SCREEN,
-    MODE_AUDIO,
+    MODE_SCREEN = 0,
+    MODE_MOTOR,
     MODE_SENSOR,
+    MODE_AUDIO,
     MODE_MAX
 } TestMode;
 

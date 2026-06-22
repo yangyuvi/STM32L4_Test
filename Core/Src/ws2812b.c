@@ -2,15 +2,15 @@
 #include "ws2812b.h"
 #include "tim.h"
 
-uint16_t DMABuffer[BUFFER_SIZE];
+static uint16_t DMABuffer[BUFFER_SIZE];
 
 /**
   * @brief  初始化缓冲区
   */
 void WS2812B_Init(void)
 {
-  uint8_t i;
-  for(i=LED_NUM*RGB_BIT; i<BUFFER_SIZE; i++){
+  uint16_t i;
+  for(i=0; i<BUFFER_SIZE; i++){
     DMABuffer[i] = 0;
   }
 
@@ -27,7 +27,7 @@ void WS2812B_Init(void)
 void WS2812B_SetLED(uint8_t index, Color_t color)
 {
   uint8_t i;
-  uint8_t offset = RGB_BIT * index;
+  uint16_t offset = RGB_BIT * index;
   for(i=0;i<8;i++){
     //G通道对应的PWM占空比，高位先发
     DMABuffer[offset+i] = (color.g & (0x80 >> i)) ? CODE_1 : CODE_0;        //判断1/0，填充不同占空比

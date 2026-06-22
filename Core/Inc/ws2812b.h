@@ -3,7 +3,7 @@
 
 #include "stm32l4xx_hal.h"
 
-#define LED_NUM         4       //灯珠数量
+#define LED_NUM         8       //灯珠数量
 #define RGB_BIT         24      //每个灯24bit的RGB数据
 
 #define WS_RESET        300     //数据复位 300*1.25us（大于280us）

@@ -1,11 +1,33 @@
-
+ 
 #include "audio.h"
 #include "sai.h"
-#include "audio_data.h"
 
-#define BUF_HALF  512
+#define BUF_HALF  32
 #define BUF_SIZE  (BUF_HALF * 2)
-static int16_t dma_buf[BUF_SIZE];    //双缓冲
+static uint16_t dma_buf[BUF_SIZE];    //双缓冲
+
+#define SIN_LEN 64
+
+const int16_t sin_table[SIN_LEN] =
+{
+     0,   3212,   6393,   9512,
+ 12539,  15446,  18204,  20787,
+ 23170,  25329,  27245,  28898,
+ 30273,  31356,  32137,  32609,
+ 32767,  32609,  32137,  31356,
+ 30273,  28898,  27245,  25329,
+ 23170,  20787,  18204,  15446,
+ 12539,   9512,   6393,   3212,
+
+     0,  -3212,  -6393,  -9512,
+-12539, -15446, -18204, -20787,
+-23170, -25329, -27245, -28898,
+-30273, -31356, -32137, -32609,
+-32767, -32609, -32137, -31356,
+-30273, -28898, -27245, -25329,
+-23170, -20787, -18204, -15446,
+-12539,  -9512,  -6393,  -3212
+};
 
 // PCM 数据指针
 // static const int16_t *pcm_data  = NULL;
@@ -18,19 +40,18 @@ static uint8_t audioPlaying = 0;
   * @param  dst     目标缓冲区
   * @param  half    要填充的半段长度
   */
-static void FillBuf(int16_t *dst, uint32_t half)
+static void FillBuf(uint16_t *dst, uint32_t half)
 {
   uint32_t i;
   for(i=0; i<half; i++){
-    dst[i] = audio_wav[pcm_pos++];
-
-    if(pcm_pos >= audio_wav_len){
-      pcm_pos = 0;
-    }
+    dst[i] = sin_table[pcm_pos++];
+  }
+  if(pcm_pos >= SIN_LEN){
+    pcm_pos = 0;  //循环播放
   }
 }
 
-//DMA中断回调，HAL自动调用
+// DMA中断回调，HAL自动调用
 void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
 {
   FillBuf(&dma_buf[0],BUF_HALF);          //前半完成，填充前半
@@ -53,32 +74,6 @@ void Audio_Init(void)
 
 }
 
-
-// /**
-//   * @brief  播放WAV文件
-//   * @param  
-//   */
-// HAL_StatusTypeDef Audio_Play(const uint8_t *wav, uint32_t size)
-// {
-//   if(!wav || size<sizeof(WavHeader_t)) return HAL_ERROR;  //输入合法性检测
-
-//   WavHeader_t *hdr = (WavHeader_t *)wav;
-
-//   //格式校验 PCM格式 16bit
-//   if(hdr->audio_format != 1) return HAL_ERROR;
-//   if(hdr->bits_per_sample != 16) return HAL_ERROR;
-  
-//   pcm_data = (const int16_t *)(wav + 44);   //跳过44字节 WAV 头，指向 PCM 数据
-//   pcm_total = hdr->data_size / 2;
-//   pcm_pos = 0;
-
-//   FillBuf(&dma_buf[0], BUF_HALF);
-//   FillBuf(&dma_buf[BUF_HALF], BUF_HALF);
-
-//   HAL_SAI_Transmit_DMA(&hsai_BlockA1,(uint8_t *)dma_buf,BUF_SIZE);
-
-//   return HAL_OK;
-// }
 
 /**
   * @brief   

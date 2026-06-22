@@ -5,17 +5,21 @@
 
 
 /**
-  * @brief  低电平使能电机
-  * @param  enable: 1-使能 0-失能
+  * @brief  电机启动
   */
-void Motor_Enable(uint8_t enable)
+void Motor_Start(void)
 {
-  if(enable){
-    HAL_GPIO_WritePin(GPIOC, StepEN_Pin, GPIO_PIN_RESET);
-  }
-  else{
-    HAL_GPIO_WritePin(GPIOC, StepEN_Pin, GPIO_PIN_SET);
-  }
+  HAL_GPIO_WritePin(GPIOC, StepEN_Pin, GPIO_PIN_RESET);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+}
+
+/**
+  * @brief  电机停止
+  */
+void Motor_Stop(void)
+{
+  HAL_GPIO_WritePin(GPIOC, StepEN_Pin, GPIO_PIN_SET);
+  HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
 }
 
 
@@ -37,22 +41,15 @@ void Motor_SetDir(uint8_t dir)
 
 
 /**
-  * @brief  停止脉冲，电机停止
-  */
-void Motor_Stop(void)
-{
-  __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,0);    //设置占空比为0
-}
-
-/**
   * @brief  电机初始化
   */
 void Motor_Init(void)
 {
-  //启动TIM3_CH1_PWM
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
-  __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,208);    //设置占空比
+  Motor_SetDir(0); //默认反转
+  Motor_Stop();  //默认停止
 
-  Motor_SetDir(1);
-  Motor_Enable(0);
+  //启动TIM3_CH1_PWM
+  __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,50);    //设置占空比
+
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 }

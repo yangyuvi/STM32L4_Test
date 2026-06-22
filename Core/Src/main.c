@@ -36,6 +36,8 @@
 #include "key.h"
 #include "ProcKey.h"
 #include "sensor.h"
+#include <stdio.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,7 +69,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -100,20 +101,30 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_RTC_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
   MX_SAI1_Init();
   MX_ADC1_Init();
   MX_USART2_UART_Init();
   MX_TIM16_Init();
+
   /* USER CODE BEGIN 2 */
+  LCD_Init();
+  // LCD_DisplayOn();
+  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);  
+
   Key_Init();
   Motor_Init();
   Sensor_Init();
-  LCD_Init();
   Audio_Init();
+
+  // Audio_Play();
+
   WS2812B_Init();
+
+  WS2812B_SetLED(0,WS2812B_GREEN);
+  WS2812B_Show();
+
 
   /* USER CODE END 2 */
 
@@ -125,8 +136,6 @@ int main(void)
     //   HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
     // }
 
-    //HAL_UART_Transmit(&huart2,(uint8_t *)adc_buf,2,HAL_MAX_DELAY);
-    //printf("%d\r\n",adc_buf[0]);    
     
     if(HAL_GetTick() - keyTick >= 10)
     {
@@ -138,8 +147,7 @@ int main(void)
     }
     
     Sensor_App();
-    
-
+  
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -165,15 +173,12 @@ void SystemClock_Config(void)
 
   /** Configure LSE Drive Capability
   */
-  HAL_PWR_EnableBkUpAccess();
-  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 1;

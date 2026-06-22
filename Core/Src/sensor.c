@@ -1,7 +1,7 @@
 
 #include "sensor.h"
 #include "adc.h"
-#include <stdio.h>
+#include "usart.h"
 
 static uint16_t adc_buf[1];
 static uint8_t sensorRunning = 0;
@@ -30,7 +30,6 @@ void Sensor_Stop(void)
 void Sensor_Init(void)
 {
   HAL_ADCEx_Calibration_Start(&hadc1,ADC_SINGLE_ENDED); //上电校准
-  HAL_ADC_Start_DMA(&hadc1,(uint32_t *)adc_buf,1);
 }
 
 
@@ -46,6 +45,7 @@ void Sensor_App(void)
   {
     sensorTick = HAL_GetTick();
     
+    // HAL_UART_Transmit(&huart2,(uint8_t *)adc_buf,2,HAL_MAX_DELAY);
     printf("%d\r\n", adc_buf[0]);
   }
 }

@@ -2,7 +2,6 @@
 #include "lcd.h"
 #include "spi.h"
 
-
 //发送一字节
 static void SPI_WriteByte(uint8_t data)
 {
@@ -52,8 +51,6 @@ void LCD_Reset(void)
   */
 void LCD_Init(void)
 {
-  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);
-
   LCD_CS_HIGH();
   LCD_DC_HIGH();
 
@@ -285,18 +282,12 @@ void LCD_FillColor(uint16_t color)
   }
 }
 
-/**
-  * @brief  低电平开启屏幕，通过开关控制
-  */
 void LCD_DisplayOn(void)
 {
-  HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);
 }
 
-/**
-  * @brief  关闭屏幕，通过开关控制
-  */
 void LCD_DisplayOff(void)
 {
-  HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_RESET);
 }

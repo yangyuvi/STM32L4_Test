@@ -6,8 +6,7 @@ packDir: .pack/Keil/STM32L4xx_DFP.2.5.0
 srcDirs: []
 virtualFolder:
   name: <virtual_root>
-  files:
-    - path: ../README.md
+  files: []
   folders:
     - name: Application
       files: []
@@ -23,30 +22,29 @@ virtualFolder:
               files:
                 - path: ../Core/Src/main.c
                 - path: ../Core/Src/gpio.c
-                - path: ../Core/Src/rtc.c
+                - path: ../Core/Src/adc.c
+                - path: ../Core/Src/dma.c
+                - path: ../Core/Src/sai.c
                 - path: ../Core/Src/spi.c
                 - path: ../Core/Src/tim.c
+                - path: ../Core/Src/usart.c
                 - path: ../Core/Src/stm32l4xx_it.c
                 - path: ../Core/Src/stm32l4xx_hal_msp.c
-                - path: ../Core/Src/motor.c
-                - path: ../Core/Src/lcd.c
-                - path: ../Core/Src/sai.c
-                - path: ../Core/Src/dma.c
                 - path: ../Core/Src/audio.c
-                - path: ../Core/Src/adc.c
-                - path: ../Core/Src/ws2812b.c
                 - path: ../Core/Src/key.c
-                - path: ../Core/Src/usart.c
+                - path: ../Core/Src/lcd.c
+                - path: ../Core/Src/motor.c
                 - path: ../Core/Src/ProcKey.c
                 - path: ../Core/Src/sensor.c
+                - path: ../Core/Src/ws2812b.c
               folders: []
     - name: Drivers
       files: []
       folders:
         - name: STM32L4xx_HAL_Driver
           files:
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rtc.c
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rtc_ex.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
@@ -62,15 +60,14 @@ virtualFolder:
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rtc.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rtc_ex.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_sai.c
+            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_sai_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_sai.c
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.c
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc_ex.c
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_usart.c
-            - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_usart_ex.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
             - path: ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
           folders: []
@@ -108,8 +105,8 @@ targets:
     toolchainConfigMap:
       AC5:
         archExtensions: ""
-        cpuType: Cortex-M4
-        floatingPointHardware: single
+        cpuType: Cortex-M3
+        floatingPointHardware: none
         options:
           version: 4
           afterBuildTasks: []
@@ -160,15 +157,15 @@ targets:
             - id: 1
               isChecked: true
               mem:
-                size: "0x20000"
+                size: "0x5000"
                 startAddr: "0x20000000"
               noInit: false
               tag: IRAM
             - id: 2
-              isChecked: true
+              isChecked: false
               mem:
-                size: "0x8000"
-                startAddr: "0x10000000"
+                size: "0x0"
+                startAddr: "0x0"
               noInit: false
               tag: IRAM
           ROM:
@@ -197,7 +194,7 @@ targets:
               isChecked: true
               isStartup: true
               mem:
-                size: "0x80000"
+                size: "0x10000"
                 startAddr: "0x8000000"
               tag: IROM
             - id: 2

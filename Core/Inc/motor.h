@@ -5,7 +5,8 @@
 
 void Motor_SetDir(uint8_t dir);
 void Motor_Stop(void);
-void Motor_Enable(uint8_t enable);
+void Motor_Start(void);
+void Motor_Stop(void);
 void Motor_Init(void);
 
 #endif 

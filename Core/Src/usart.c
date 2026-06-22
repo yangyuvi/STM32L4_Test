@@ -124,6 +124,20 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+#pragma import(__use_no_semihosting)
+
+struct __FILE
+{
+  int handle;
+};
+
+FILE __stdout;
+
+void _sys_exit(int x)
+{
+  
+}
+
 // 重定向函数
 int fputc(int ch, FILE *f)
 {
