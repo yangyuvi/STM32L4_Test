@@ -11,6 +11,7 @@
 
 TestMode mode = MODE_SCREEN;   //默认屏幕测试
 static uint8_t color = 0;
+static uint8_t lcdon = 1;
 
 /**
   * @brief  处理按键1事件，改变模式
@@ -23,13 +24,14 @@ void OnKey1Event(KeyEvent event)
   mode = (mode+1) % MODE_MAX;   
 
   //停止其他测试
-  // LCD_DisplayOff();
+  LCD_DisplayOff();
   Motor_Stop();
   Audio_Stop();
   Sensor_Stop();  
 
   //同步重置标志位
-  // color = 0;
+  color = 0;
+  lcdon = 0;
 
   //指示灯
   WS2812B_Clear();
@@ -49,7 +51,11 @@ void OnKey2Event(KeyEvent event)
   switch(mode)
   {
     case MODE_SCREEN:
-      // LCD_DisplayOn();
+      if(lcdon==0){
+        lcdon = 1;
+        LCD_DisplayOn();
+        LCD_Init();
+      }
       switch(color)
       {
         case 0: LCD_FillColor(COLOR_RED);   break;
@@ -59,6 +65,7 @@ void OnKey2Event(KeyEvent event)
         case 4: LCD_FillColor(COLOR_BLACK); break;
       }
       color = (color + 1) % 5;
+      
       break;
 
     case MODE_AUDIO:

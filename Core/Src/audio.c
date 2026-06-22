@@ -2,12 +2,13 @@
 #include "audio.h"
 #include "sai.h"
 
-#define BUF_HALF  32
+#define BUF_HALF  8
 #define BUF_SIZE  (BUF_HALF * 2)
-static uint16_t dma_buf[BUF_SIZE];    //双缓冲
+static int16_t dma_buf[BUF_SIZE];    //双缓冲
 
 #define SIN_LEN 64
 
+//播放单一频段的正弦波
 const int16_t sin_table[SIN_LEN] =
 {
      0,   3212,   6393,   9512,
@@ -29,9 +30,14 @@ const int16_t sin_table[SIN_LEN] =
 -12539,  -9512,  -6393,  -3212
 };
 
+const int16_t beep[] =
+{
+     0, 1000, 2000, 3000,
+  2000, 1000,    0,-1000,
+ -2000,-3000,-2000,-1000
+};
+
 // PCM 数据指针
-// static const int16_t *pcm_data  = NULL;
-// static uint32_t       pcm_total = 0;
 static uint32_t pcm_pos = 0;
 static uint8_t audioPlaying = 0;
 
@@ -40,14 +46,19 @@ static uint8_t audioPlaying = 0;
   * @param  dst     目标缓冲区
   * @param  half    要填充的半段长度
   */
-static void FillBuf(uint16_t *dst, uint32_t half)
+static void FillBuf(int16_t *dst, uint32_t half)
 {
   uint32_t i;
-  for(i=0; i<half; i++){
-    dst[i] = sin_table[pcm_pos++];
-  }
-  if(pcm_pos >= SIN_LEN){
-    pcm_pos = 0;  //循环播放
+  for(i = 0; i < half; i++)
+  {
+    dst[i] = beep[pcm_pos]/2;
+
+    pcm_pos++;
+
+    if(pcm_pos >= 12)
+    {
+        pcm_pos = 0;  //循环播放
+    }
   }
 }
 

@@ -284,10 +284,10 @@ void LCD_FillColor(uint16_t color)
 
 void LCD_DisplayOn(void)
 {
-  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_RESET);
 }
 
 void LCD_DisplayOff(void)
 {
-  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_SET);
 }

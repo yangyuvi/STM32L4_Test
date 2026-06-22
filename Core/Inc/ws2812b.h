@@ -3,7 +3,7 @@
 
 #include "stm32l4xx_hal.h"
 
-#define LED_NUM         8       //灯珠数量
+#define LED_NUM         4       //灯珠数量
 #define RGB_BIT         24      //每个灯24bit的RGB数据
 
 #define WS_RESET        300     //数据复位 300*1.25us（大于280us）
@@ -23,8 +23,8 @@ typedef struct{
 //常用颜色
 #define WS2812B_OFF       ((Color_t){0,   0,   0  })
 #define WS2812B_RED       ((Color_t){255, 0,   0  })
-#define WS2812B_GREEN     ((Color_t){0,   255, 0  })
-#define WS2812B_BLUE      ((Color_t){0,   0,   255})
+#define WS2812B_GREEN     ((Color_t){0,   128, 0  })
+#define WS2812B_BLUE      ((Color_t){0,   0,   128})
 #define WS2812B_WHITE     ((Color_t){255, 255, 255})
 #define WS2812B_YELLOW    ((Color_t){255, 255, 0  })
 #define WS2812B_ORANGE    ((Color_t){255, 128, 0  })

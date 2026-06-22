@@ -80,8 +80,8 @@ void Error_Handler(void);
 #define StepEN_GPIO_Port GPIOC
 #define LCD_DC_Pin GPIO_PIN_3
 #define LCD_DC_GPIO_Port GPIOB
-// #define LCD_CTL_Pin GPIO_PIN_4
-// #define LCD_CTL_GPIO_Port GPIOB
+#define LCD_CTL_Pin GPIO_PIN_4
+#define LCD_CTL_GPIO_Port GPIOB
 #define WS2812B_DATA_Pin GPIO_PIN_8
 #define WS2812B_DATA_GPIO_Port GPIOB
 

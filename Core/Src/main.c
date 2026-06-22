@@ -109,34 +109,29 @@ int main(void)
   MX_TIM16_Init();
 
   /* USER CODE BEGIN 2 */
-  LCD_Init();
-  // LCD_DisplayOn();
   HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);  
 
   Key_Init();
   Motor_Init();
   Sensor_Init();
   Audio_Init();
-
-  // Audio_Play();
-
   WS2812B_Init();
 
   WS2812B_SetLED(0,WS2812B_GREEN);
   WS2812B_Show();
 
+  HAL_Delay(50);
+  LCD_DisplayOn();
+  LCD_Init();
+
+  LCD_FillColor(COLOR_BLACK);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
-    // if(HAL_GPIO_ReadPin(GPIOA,PowerKey_Pin)==0){    //低电平为按键按下
-    //   HAL_GPIO_WritePin(GPIOC,PwrEn_Pin,GPIO_PIN_RESET);
-    // }
-
-    
+  { 
     if(HAL_GetTick() - keyTick >= 10)
     {
       keyTick = HAL_GetTick();
