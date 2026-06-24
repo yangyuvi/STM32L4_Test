@@ -117,10 +117,9 @@ int main(void)
   Audio_Init();
   WS2812B_Init();
 
-  WS2812B1_SetLED(1,WS2812B_GREEN);
+  WS2812B1_SetLED(0,WS2812B_GREEN);
   WS2812B1_Show();
-  WS2812B2_SetAll(WS2812B_RED);
-  WS2812B2_Show();
+
 
 
 
@@ -141,6 +140,7 @@ int main(void)
     Lcd_App();
     Sensor_App();
     WS2812B2_App();
+    Motor_App();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

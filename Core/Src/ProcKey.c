@@ -30,7 +30,6 @@ void OnKey1Event(KeyEvent event)
 
   //同步重置标志位
   color = 0;
-
   //指示灯
   WS2812B1_Clear();
   WS2812B1_SetLED(mode, WS2812B_GREEN);
@@ -44,45 +43,63 @@ void OnKey1Event(KeyEvent event)
   */
 void OnKey2Event(KeyEvent event)
 { 
-  if (event != KEY_EVENT_UP) return;   // 松手触发
-
-  switch(mode)
+  switch (event)
   {
-    case MODE_SCREEN:
-      if (!LCD_IsOn()) {
-        LCD_DisplayOn();
-        WS2812B1_SetLED(MODE_SCREEN, WS2812B_BLUE);
-      }
-      else {
-        LCD_DisplayOff();
-        WS2812B1_SetLED(MODE_SCREEN, WS2812B_GREEN);
-      }
-      WS2812B1_Show();
+    case KEY_EVENT_UP:
+      switch(mode)
+      {
+      case MODE_SCREEN:
+        if (!LCD_IsOn()) {
+          LCD_DisplayOn();
+          WS2812B1_SetLED(MODE_SCREEN, WS2812B_BLUE);
+        }
+        else {
+          LCD_DisplayOff();
+          WS2812B1_SetLED(MODE_SCREEN, WS2812B_GREEN);
+        }
+        WS2812B1_Show();
       break;
 
-    case MODE_AUDIO:
-      if (!Audio_IsOn()) {
-        Audio_Play();
-        WS2812B1_SetLED(MODE_AUDIO, WS2812B_BLUE);
-      }
-      else {
-        Audio_Stop();
-        WS2812B1_SetLED(MODE_AUDIO, WS2812B_GREEN);
-      }
-      WS2812B1_Show();
+      case MODE_AUDIO:
+        if (!Audio_IsOn()) {
+          Audio_Play();
+          WS2812B1_SetLED(MODE_AUDIO, WS2812B_BLUE);
+        }
+        else {
+          Audio_Stop();
+          WS2812B1_SetLED(MODE_AUDIO, WS2812B_GREEN);
+        }
+        WS2812B1_Show();
       break;
 
-    case MODE_SENSOR:
-      if (!Sensor_IsOn()) {
-        Sensor_Start();
-        WS2812B1_SetLED(MODE_SENSOR, WS2812B_BLUE);
-      }
-      else {
-        Sensor_Stop();
-        WS2812B1_SetLED(MODE_SENSOR, WS2812B_GREEN);
-      }
-      WS2812B1_Show();
+      case MODE_SENSOR:
+        if (!Sensor_IsOn()) {
+          Sensor_Start();
+          WS2812B1_SetLED(MODE_SENSOR, WS2812B_BLUE);
+        }
+        else {
+          Sensor_Stop();
+          WS2812B1_SetLED(MODE_SENSOR, WS2812B_GREEN);
+        }
+        WS2812B1_Show();
       break;
+
+      case MODE_MOTOR:
+        if(!Motor_IsOn()){
+          Motor_Start();
+          Motor_SetAutoFlag();
+          WS2812B1_SetLED(MODE_MOTOR, WS2812B_BLUE);
+        }
+        else{
+          Motor_Stop();
+          Motor_ResetAutoFlag();
+          WS2812B1_SetLED(MODE_MOTOR, WS2812B_GREEN);
+        } 
+        WS2812B1_Show();
+      break;
+    default: break;
+  }
+    break;
 
     default: break;
   }
@@ -97,53 +114,49 @@ void OnKey2Event(KeyEvent event)
  void OnKey3Event(KeyEvent event)
 {  
   static uint8_t dir = 0;
-
   switch (event)
   {
-  case KEY_EVENT_DOWN:
-    if(mode != MODE_MOTOR) return;
-    WS2812B1_SetLED(MODE_MOTOR, WS2812B_BLUE);
-    WS2812B1_Show();
-    Motor_SetDir(dir);
-    Motor_Start();
-    break;
-
+  
   case KEY_EVENT_UP:
     switch (mode)
     {
-    case MODE_SCREEN:
-      
-      switch(color)
-      {
-        case 0: LCD_FillColor(COLOR_RED);   break;
-        case 1: LCD_FillColor(COLOR_GREEN); break;
-        case 2: LCD_FillColor(COLOR_BLUE);  break;
-        case 3: LCD_FillColor(COLOR_WHITE); break;
-        case 4: LCD_FillColor(COLOR_BLACK); break;
-        case 5: LCD_AutoTest();
-      }
-      color = (color + 1) % 6;
-      break;
-
-    case MODE_SENSOR:
-      Sensor_Zero();
-      break;
-
     case MODE_MOTOR:
-      WS2812B1_SetLED(MODE_MOTOR, WS2812B_GREEN);
-      WS2812B1_Show();
       Motor_Stop();
-      dir ^= 1;           // 按位异或
-      break;
-      
-    default:
-      break;
-    }
+      dir ^= 1;
     break;
-  default:
+
+    case MODE_SCREEN:
+      if(color < 5){
+        LCD_AutoTestStop();
+
+        switch(color)
+        {
+          case 0: LCD_FillColor(COLOR_RED);   break;
+          case 1: LCD_FillColor(COLOR_GREEN); break;
+          case 2: LCD_FillColor(COLOR_BLUE);  break;
+          case 3: LCD_FillColor(COLOR_WHITE); break;
+          case 4: LCD_FillColor(COLOR_BLACK); break;
+        }
+      }
+      else LCD_AutoTestStart();
+      color++;
+      if(color > 5)  color = 0;  
     break;
+
+  case MODE_SENSOR: Sensor_Zero();  break;
+
+  default:  break;
   }
-  
+  break;
+
+  case KEY_EVENT_DOWN:
+    if(mode != MODE_MOTOR) return;
+    Motor_SetDir(dir);
+    Motor_Start();   
+  break;
+
+  default: break;
+  }
 }
 
 

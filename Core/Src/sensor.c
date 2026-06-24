@@ -81,19 +81,15 @@ void Sensor_App(void)
   {
     sensorTick = HAL_GetTick();
     uint16_t adc = Sensor_GetADC();
-
-    printf("ADC=%d\n", adc);
-
+   
     float voltage = adc * 3300.0f / 4095.0f; 
-
-    printf("vol=%.2fmv\n", voltage);
-
+   
     int32_t adc_net = (int32_t)adc - (int32_t)adc_zero;
     
     // 压力 = 净ADC * 系数k
-    float pressure = (float)adc_net * 20 / 1517;
+    float pressure = (float)adc_net * 20.0f / 1517.0f;
 
-    printf("pre=%.2fg\n",pressure);
+    printf("ADC=%d  vol=%.2fmv  pre=%.2fg\r\n",adc,voltage,pressure);
   }
 }
 

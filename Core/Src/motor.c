@@ -3,6 +3,8 @@
 #include "gpio.h"
 #include "tim.h"
 
+static uint8_t motorAutoOn = 0;
+
 
 /**
   * @brief  电机启动
@@ -22,6 +24,10 @@ void Motor_Stop(void)
   HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
 }
 
+uint8_t Motor_IsOn(void)
+{
+  return motorAutoOn;
+}
 
 /**
   * @brief  设置电机运行方向
@@ -39,6 +45,14 @@ void Motor_SetDir(uint8_t dir)
   
 }
 
+void Motor_SetAutoFlag()
+{
+  motorAutoOn = 1;
+}
+
+void Motor_ResetAutoFlag(){
+  motorAutoOn = 0;
+}
 
 /**
   * @brief  电机初始化
@@ -52,4 +66,23 @@ void Motor_Init(void)
   __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,50);    //设置占空比
 
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+}
+
+
+/**
+  * @brief  正转3s，反转3s
+  */
+void Motor_App(void)
+{
+  static uint32_t motorTick = 0;
+  static uint8_t dir = 0;
+
+  if(!motorAutoOn) return;
+  
+  if(HAL_GetTick() - motorTick >= 7000)
+  {
+    motorTick = HAL_GetTick();
+    dir ^= 1;
+    Motor_SetDir(dir);
+  }
 }

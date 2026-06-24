@@ -1,8 +1,10 @@
 
 #include "lcd.h"
 #include "spi.h"
+#include "usart.h"
 
-static uint8_t LcdDisplaying = 0;
+static uint8_t lcdOn = 0;
+static uint8_t lcdAutoOn = 0;
 
 //发送一字节
 static void SPI_WriteByte(uint8_t data)
@@ -14,7 +16,7 @@ static void SPI_WriteByte(uint8_t data)
   * @brief  发送命令
   * @param  cmd
   */
-void SSD_CMD(uint8_t cmd)
+static void SSD_CMD(uint8_t cmd)
 {
   LCD_DC_LOW();
   LCD_CS_LOW();
@@ -26,7 +28,7 @@ void SSD_CMD(uint8_t cmd)
   * @brief  发送数据/参数
   * @param  dat
   */
-void SSD_PAR(uint8_t dat)
+static void SSD_PAR(uint8_t dat)
 {
   LCD_DC_HIGH();
   LCD_CS_LOW();
@@ -37,7 +39,7 @@ void SSD_PAR(uint8_t dat)
 #define SSD_DAT SSD_PAR
 
 
-void LCD_Reset(void)
+static void LCD_Reset(void)
 {
   LCD_RST_HIGH();
   HAL_Delay(10);
@@ -288,7 +290,7 @@ void LCD_FillColor(uint16_t color)
 
 void LCD_DisplayOn(void)
 {
-  LcdDisplaying = 1;
+  lcdOn = 1;
   HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_RESET);
 
   LCD_Init();
@@ -296,22 +298,44 @@ void LCD_DisplayOn(void)
 
 void LCD_DisplayOff(void)
 {
-  LcdDisplaying = 0;
+  lcdOn = 0;
   HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_SET);
 }
 
 uint8_t LCD_IsOn(void)
 {
-  return LcdDisplaying;
+  return lcdOn;
+}
+
+void LCD_AutoTestStart(void)
+{
+  lcdAutoOn = 1;
+}
+
+void LCD_AutoTestStop(void)
+{
+  lcdAutoOn = 0;
 }
 
 void Lcd_App(void)
 {
   static uint32_t lcdTick = 0;
-//   if() return;
-
-  if(HAL_GetTick() - lcdTick >= 1000)
+  static uint32_t color = 0;
+  
+  if(!lcdAutoOn) return;
+  if(HAL_GetTick() - lcdTick >= 2000)
   {
-    // LCD_FillColor(color);
+    lcdTick = HAL_GetTick();
+    switch (color)
+    {
+    case 0: LCD_FillColor(COLOR_RED);   break;
+    case 1: LCD_FillColor(COLOR_GREEN); break;
+    case 2: LCD_FillColor(COLOR_BLUE);   break;
+    case 3: LCD_FillColor(COLOR_WHITE); break;
+    case 4: LCD_FillColor(COLOR_BLACK);   break;
+    default:
+      break;
+    }
+    color = (color+1) % 5;
   }
 }

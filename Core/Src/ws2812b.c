@@ -81,26 +81,28 @@ void WS2812B1_Clear(void)
 
 void WS2812B2_App(void)
 {
-  // static uint32_t rgbTick = 0;
-  // static uint8_t colorIndex = 0;
+  static uint32_t rgbTick = 0;
+  static uint8_t colorIndex = 0;
 
-  // if(HAL_GetTick() - rgbTick >= 3000){
-    // switch (colorIndex)
-    // {
-    // case 0:
-    //   WS2812B2_SetAll(WS2812B_RED);
-    //   break;
-    // case 1:
-    //   WS2812B2_SetAll(WS2812B_GREEN);
-    //   break;
-    // case 2:
-      // WS2812B2_SetAll(WS2812B_BLUE);
-    // break;
-    // default:
-    //   break;
-    // }
-    // colorIndex = (colorIndex+1) % 3;
-    // WS2812B2_Show();
+  if(HAL_GetTick() - rgbTick >= 1000){
+    rgbTick = HAL_GetTick();
+
+    switch (colorIndex)
+    {
+    case 0:
+      WS2812B2_SetAll(WS2812B_RED);
+      break;
+    case 1:
+      WS2812B2_SetAll(WS2812B_GREEN);
+      break;
+    case 2:
+      WS2812B2_SetAll(WS2812B_BLUE);
+    break;
+    default:
+      break;
+    }
+    colorIndex = (colorIndex+1) % 3;
+    WS2812B2_Show();
    
-  // }
+  }
 }

@@ -25,5 +25,7 @@ void LCD_DisplayOff(void);
 void LCD_DisplayOn(void);
 uint8_t LCD_IsOn(void);
 void Lcd_App(void);
+void LCD_AutoTestStart(void);
+void LCD_AutoTestStop(void);
 
 #endif 
