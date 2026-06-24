@@ -2,6 +2,8 @@
 #include "lcd.h"
 #include "spi.h"
 
+static uint8_t LcdDisplaying = 0;
+
 //发送一字节
 static void SPI_WriteByte(uint8_t data)
 {
@@ -51,6 +53,8 @@ void LCD_Reset(void)
   */
 void LCD_Init(void)
 {
+  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);  
+
   LCD_CS_HIGH();
   LCD_DC_HIGH();
 
@@ -284,10 +288,30 @@ void LCD_FillColor(uint16_t color)
 
 void LCD_DisplayOn(void)
 {
+  LcdDisplaying = 1;
   HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_RESET);
+
+  LCD_Init();
 }
 
 void LCD_DisplayOff(void)
 {
+  LcdDisplaying = 0;
   HAL_GPIO_WritePin(LCD_CTL_GPIO_Port, LCD_CTL_Pin, GPIO_PIN_SET);
+}
+
+uint8_t LCD_IsOn(void)
+{
+  return LcdDisplaying;
+}
+
+void Lcd_App(void)
+{
+  static uint32_t lcdTick = 0;
+//   if() return;
+
+  if(HAL_GetTick() - lcdTick >= 1000)
+  {
+    // LCD_FillColor(color);
+  }
 }

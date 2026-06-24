@@ -23,5 +23,7 @@ void LCD_Init(void);
 void LCD_FillColor(uint16_t color);
 void LCD_DisplayOff(void);
 void LCD_DisplayOn(void);
+uint8_t LCD_IsOn(void);
+void Lcd_App(void);
 
 #endif 

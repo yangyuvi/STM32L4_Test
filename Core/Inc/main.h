@@ -84,6 +84,8 @@ void Error_Handler(void);
 #define LCD_CTL_GPIO_Port GPIOB
 #define WS2812B_DATA_Pin GPIO_PIN_8
 #define WS2812B_DATA_GPIO_Port GPIOB
+#define RGB_GPIO_Port GPIOA
+#define RGB_Pin GPIO_PIN_1
 
 /* USER CODE BEGIN Private defines */
 

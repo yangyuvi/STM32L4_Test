@@ -107,24 +107,22 @@ int main(void)
   MX_ADC1_Init();
   MX_USART2_UART_Init();
   MX_TIM16_Init();
+  MX_TIM2_Init();
 
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(LCD_BK_GPIO_Port, LCD_BK_Pin, GPIO_PIN_SET);  
-
+  
   Key_Init();
   Motor_Init();
   Sensor_Init();
   Audio_Init();
   WS2812B_Init();
 
-  WS2812B_SetLED(0,WS2812B_GREEN);
-  WS2812B_Show();
+  WS2812B1_SetLED(1,WS2812B_GREEN);
+  WS2812B1_Show();
+  WS2812B2_SetAll(WS2812B_RED);
+  WS2812B2_Show();
 
-  HAL_Delay(50);
-  LCD_DisplayOn();
-  LCD_Init();
 
-  LCD_FillColor(COLOR_BLACK);
 
   /* USER CODE END 2 */
 
@@ -135,14 +133,14 @@ int main(void)
     if(HAL_GetTick() - keyTick >= 10)
     {
       keyTick = HAL_GetTick();
-
       Key_Scan(KEY1, OnKey1Event);
       Key_Scan(KEY2, OnKey2Event);
       Key_Scan(KEY3, OnKey3Event);
     }
     
+    Lcd_App();
     Sensor_App();
-  
+    WS2812B2_App();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

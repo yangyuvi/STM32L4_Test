@@ -51,13 +51,12 @@ static void FillBuf(int16_t *dst, uint32_t half)
   uint32_t i;
   for(i = 0; i < half; i++)
   {
-    dst[i] = beep[pcm_pos]/2;
-
+    dst[i] = beep[pcm_pos] * 2;
     pcm_pos++;
 
     if(pcm_pos >= 12)
     {
-        pcm_pos = 0;  //循环播放
+      pcm_pos = 0;  //循环播放
     }
   }
 }
@@ -77,7 +76,7 @@ void HAL_SAI_TxCpltCallback(SAI_HandleTypeDef *hsai)
   */
 void Audio_Init(void)
 {
-  pcm_pos   = 0;
+  pcm_pos = 0;
 
   //预填充
   FillBuf(&dma_buf[0],        BUF_HALF);
@@ -111,7 +110,7 @@ void Audio_Stop(void)
   * @brief  播放状态
   * @retval 1正在播放 0未播放
   */
-uint8_t Audio_IsPlaying(void)
+uint8_t Audio_IsOn(void)
 {
   return audioPlaying;
 }

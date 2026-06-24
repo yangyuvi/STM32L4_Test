@@ -11,7 +11,6 @@
 
 TestMode mode = MODE_SCREEN;   //默认屏幕测试
 static uint8_t color = 0;
-static uint8_t lcdon = 1;
 
 /**
   * @brief  处理按键1事件，改变模式
@@ -31,12 +30,11 @@ void OnKey1Event(KeyEvent event)
 
   //同步重置标志位
   color = 0;
-  lcdon = 0;
 
   //指示灯
-  WS2812B_Clear();
-  WS2812B_SetLED(mode, WS2812B_GREEN);
-  WS2812B_Show();
+  WS2812B1_Clear();
+  WS2812B1_SetLED(mode, WS2812B_GREEN);
+  WS2812B1_Show();
 }
 
 
@@ -51,45 +49,39 @@ void OnKey2Event(KeyEvent event)
   switch(mode)
   {
     case MODE_SCREEN:
-      if(lcdon==0){
-        lcdon = 1;
+      if (!LCD_IsOn()) {
         LCD_DisplayOn();
-        LCD_Init();
+        WS2812B1_SetLED(MODE_SCREEN, WS2812B_BLUE);
       }
-      switch(color)
-      {
-        case 0: LCD_FillColor(COLOR_RED);   break;
-        case 1: LCD_FillColor(COLOR_GREEN); break;
-        case 2: LCD_FillColor(COLOR_BLUE);  break;
-        case 3: LCD_FillColor(COLOR_WHITE); break;
-        case 4: LCD_FillColor(COLOR_BLACK); break;
+      else {
+        LCD_DisplayOff();
+        WS2812B1_SetLED(MODE_SCREEN, WS2812B_GREEN);
       }
-      color = (color + 1) % 5;
-      
+      WS2812B1_Show();
       break;
 
     case MODE_AUDIO:
-      if (!Audio_IsPlaying()) {
+      if (!Audio_IsOn()) {
         Audio_Play();
-        WS2812B_SetLED(MODE_AUDIO, WS2812B_BLUE);
+        WS2812B1_SetLED(MODE_AUDIO, WS2812B_BLUE);
       }
       else {
         Audio_Stop();
-        WS2812B_SetLED(MODE_AUDIO, WS2812B_GREEN);
+        WS2812B1_SetLED(MODE_AUDIO, WS2812B_GREEN);
       }
-      WS2812B_Show();
+      WS2812B1_Show();
       break;
 
     case MODE_SENSOR:
-      if (!Sensor_IsRunning()) {
+      if (!Sensor_IsOn()) {
         Sensor_Start();
-        WS2812B_SetLED(MODE_SENSOR, WS2812B_BLUE);
+        WS2812B1_SetLED(MODE_SENSOR, WS2812B_BLUE);
       }
       else {
         Sensor_Stop();
-        WS2812B_SetLED(MODE_SENSOR, WS2812B_GREEN);
+        WS2812B1_SetLED(MODE_SENSOR, WS2812B_GREEN);
       }
-      WS2812B_Show();
+      WS2812B1_Show();
       break;
 
     default: break;
@@ -105,25 +97,53 @@ void OnKey2Event(KeyEvent event)
  void OnKey3Event(KeyEvent event)
 {  
   static uint8_t dir = 0;
-  
-  if (mode != MODE_MOTOR) return;
 
   switch (event)
   {
   case KEY_EVENT_DOWN:
-    WS2812B_SetLED(MODE_MOTOR, WS2812B_BLUE);
+    if(mode != MODE_MOTOR) return;
+    WS2812B1_SetLED(MODE_MOTOR, WS2812B_BLUE);
+    WS2812B1_Show();
     Motor_SetDir(dir);
     Motor_Start();
     break;
+
   case KEY_EVENT_UP:
-    WS2812B_SetLED(MODE_MOTOR, WS2812B_GREEN);
-    Motor_Stop();
-    dir ^= 1;           // 按位异或
+    switch (mode)
+    {
+    case MODE_SCREEN:
+      
+      switch(color)
+      {
+        case 0: LCD_FillColor(COLOR_RED);   break;
+        case 1: LCD_FillColor(COLOR_GREEN); break;
+        case 2: LCD_FillColor(COLOR_BLUE);  break;
+        case 3: LCD_FillColor(COLOR_WHITE); break;
+        case 4: LCD_FillColor(COLOR_BLACK); break;
+        case 5: LCD_AutoTest();
+      }
+      color = (color + 1) % 6;
+      break;
+
+    case MODE_SENSOR:
+      Sensor_Zero();
+      break;
+
+    case MODE_MOTOR:
+      WS2812B1_SetLED(MODE_MOTOR, WS2812B_GREEN);
+      WS2812B1_Show();
+      Motor_Stop();
+      dir ^= 1;           // 按位异或
+      break;
+      
+    default:
+      break;
+    }
     break;
   default:
     break;
   }
-  WS2812B_Show();
+  
 }
 
 

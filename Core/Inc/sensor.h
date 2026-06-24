@@ -8,6 +8,7 @@ void Sensor_Start(void);
 void Sensor_Stop(void);
 void Sensor_Init(void);
 void Sensor_App(void);
-uint8_t Sensor_IsRunning(void);
+uint8_t Sensor_IsOn(void);
+void Sensor_Zero(void);
 
 #endif 
