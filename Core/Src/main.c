@@ -26,6 +26,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "i2c.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -37,6 +38,7 @@
 #include "ProcKey.h"
 #include "sensor.h"
 #include <stdio.h>
+#include "tp.h"
 
 /* USER CODE END Includes */
 
@@ -108,6 +110,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM16_Init();
   MX_TIM2_Init();
+  MX_I2C3_Init();
 
   /* USER CODE BEGIN 2 */
   
@@ -119,8 +122,6 @@ int main(void)
 
   WS2812B1_SetLED(0,WS2812B_GREEN);
   WS2812B1_Show();
-
-
 
 
   /* USER CODE END 2 */
@@ -136,7 +137,20 @@ int main(void)
       Key_Scan(KEY2, OnKey2Event);
       Key_Scan(KEY3, OnKey3Event);
     }
-    
+
+    // 触摸点打印
+    if(tp_irq_flag)
+    {
+      tp_irq_flag = 0;
+
+      TP_Read_Data();
+
+      if(tp_status.finger)
+      {
+        printf("X=%d Y=%d\r\n",tp_status.x,tp_status.y);
+      }
+    }
+
     Lcd_App();
     Sensor_App();
     WS2812B2_App();

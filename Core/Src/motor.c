@@ -11,8 +11,8 @@ static uint8_t motorAutoOn = 0;
   */
 void Motor_Start(void)
 {
-  HAL_GPIO_WritePin(GPIOC, StepEN_Pin, GPIO_PIN_RESET);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_GPIO_WritePin(GPIOC, StepEN_Pin, GPIO_PIN_RESET);
 }
 
 /**
@@ -64,8 +64,6 @@ void Motor_Init(void)
 
   //启动TIM3_CH1_PWM
   __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,50);    //设置占空比
-
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 }
 
 

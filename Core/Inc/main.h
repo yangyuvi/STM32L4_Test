@@ -86,6 +86,15 @@ void Error_Handler(void);
 #define WS2812B_DATA_GPIO_Port GPIOB
 #define RGB_GPIO_Port GPIOA
 #define RGB_Pin GPIO_PIN_1
+#define Touch_SCL_Pin GPIO_PIN_0
+#define Touch_SCL_GPIO_Port GPIOC
+#define Touch_SDA_Pin GPIO_PIN_1
+#define Touch_SDA_GPIO_Port GPIOC
+#define Touch_RST_Pin GPIO_PIN_2
+#define Touch_RST_GPIO_Port GPIOB
+#define Touch_INT_Pin GPIO_PIN_9
+#define Touch_INT_GPIO_Port GPIOC
+#define Touch_INT_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 

@@ -106,3 +106,13 @@ void WS2812B2_App(void)
    
   }
 }
+
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM2) {
+    HAL_TIM_PWM_Stop_DMA(&htim2, TIM_CHANNEL_2);
+  }
+  if (htim->Instance == TIM16){
+    HAL_TIM_PWM_Stop_DMA(&htim16, TIM_CHANNEL_1);
+  }
+}

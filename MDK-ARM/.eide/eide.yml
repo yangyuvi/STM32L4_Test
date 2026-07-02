@@ -38,6 +38,8 @@ virtualFolder:
                 - path: ../Core/Src/sensor.c
                 - path: ../Core/Src/system_stm32l4xx.c
                 - path: ../Core/Src/ws2812b.c
+                - path: ../Core/Src/i2c.c
+                - path: ../Core/Src/tp.c
               folders: []
     - name: Drivers
       files: []
