@@ -12,6 +12,16 @@ SPI通信协议硬件实现。
 
 测试标准：无花屏、无闪屏。
 
+触摸屏 坐标显示
+I2C驱动，GPIO_TP_INT外部中断下降沿触发
+从机地址    0x15
+寄存器地址  0x02 --> 触摸点数
+           0x03 --> x pos H x坐标高位
+           0x04 --> x pos L x坐标低位
+           0x05 --> y pos H y坐标高位
+           0x06 --> y pos L y坐标低位
+
+
 ## 音频测试
 I2S + DMA双缓冲。
 方案一：播放一段音频，hello.wav转换成audio_data.h数组形式，去掉WavHeader，仅保留PCM数据。
